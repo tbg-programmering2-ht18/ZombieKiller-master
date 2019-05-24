@@ -17,11 +17,9 @@ namespace ZombieKillerMenu
     public partial class usrForm : Form
     {
         Menu FrmMenu = new Menu();
-        static Dictionary<string, string> userPasswordDict = new Dictionary<string, string>();
-        static Dictionary<string, Records> userRecordsDict = new Dictionary<string, Records>();
+        static Dictionary<string, string> userLoginDict = new Dictionary<string, string>(); // Stores players login data
+        public static Dictionary<string, Records> userRecordsDict = new Dictionary<string, Records>(); // Stores players ingame data
         String UserFilename;
-
-        public int checkForbtnclick = 0;
 
         public usrForm()
         {
@@ -29,33 +27,33 @@ namespace ZombieKillerMenu
             Setup();
         }
 
+        // ↓↓ Function 1: creates files for data storage and reads the user data in those files ↓↓
         private void Setup()
         {
-            String Path = @"C:\ZombieData\"; // Here all data for the game exist
-            // If this Path does not exist, then create it
+            String Path = @"C:\ZombieData\"; // In this folder all player data for the game exist
+            // If the folder does not exist then create it
             if (!Directory.Exists(Path))
             {
                 Directory.CreateDirectory(Path);
             }
 
-            UserFilename = Path + "user_login.txt";// Read Login data for the user
-
-            // If the login file does not exist, also means there is no user, then create
+            UserFilename = Path + "user_login.txt";// File that stores login data for player
+            // If the login file does not exist, also means there is no user, then create the file
             if (!File.Exists(UserFilename))
             {
                 FileStream f = File.Create(UserFilename);
                 f.Close();
-                lblErrorMessage.Text = "You have no user please fill in the sign up"; // this will automatically happen the first time
+                lblErrorMessage.Text = "You have no user please fill in the sign up form"; // This will automatically happen the first time
             }
 
-            // Deserialize prevous login data with JSON
+            // Deserialize any prevous login data with JSON
             else
             {
                 string json = File.ReadAllText(UserFilename);
-                userPasswordDict = JsonConvert.DeserializeObject<Dictionary<String, String>>(json);
+                userLoginDict = JsonConvert.DeserializeObject<Dictionary<String, String>>(json);
             }
 
-            // Read the users saved data (Records)
+            // Read the users saved data, that is, the Records
             String UserRecordFilename = Path + "user_records.txt";
             // if this file does not exist
             if (!File.Exists(UserRecordFilename))
@@ -69,11 +67,11 @@ namespace ZombieKillerMenu
                 string json = File.ReadAllText(UserRecordFilename);
                 userRecordsDict = JsonConvert.DeserializeObject<Dictionary<string, Records>>(json);
             }
-
-
         }
+        // ↑↑ Function 1: creates files for data storage and reads the user data in those files ↑↑
 
 
+        // ↓↓ Function 2: create a user ↓↓
         private void btnSignUp_Click(object sender, EventArgs e)
         {
             // Login data
@@ -85,21 +83,19 @@ namespace ZombieKillerMenu
             int highscore = 0;
             int survivaltime = 0;
 
-            // A user with a password is created with specifik attributes, these attributes are visible for other players (Record)
+            // A user with a password is created with specific attributes, these attributes are visible for other players (Record)
             Records userRecords = new Records(gamename, highscore, survivaltime);
-            userPasswordDict.Add(username, password);
-            userRecordsDict.Add(username, userRecords);
+            userLoginDict.Add(username, password);
             string errorMessage = "";
 
             // If error message is none then there are no issues what-so-ever..., therefore, create user!
             if (errorMessage == "") 
             {
-                this.Hide();
-                string jsonUserPasswd = JsonConvert.SerializeObject(userPasswordDict, Formatting.Indented); // Create persitant storing with JSON
+                string jsonUserPasswd = JsonConvert.SerializeObject(userLoginDict, Formatting.Indented); // Create persitant storing with JSON
                 File.WriteAllText(UserFilename, jsonUserPasswd); // Store the JSON on the file created in the "setup" function
             }
         }
-
+        // ↑↑ Function 2: create a user ↑↑
 
 
 
@@ -113,12 +109,13 @@ namespace ZombieKillerMenu
 
         }
 
+        // ↓↓ Function 3: Checks if the entered login data corresponds with any previus saved user data ↓↓
         private string Login(string username, string password)
         {
             string registredPassword = "";
             // Given the key "user" get value(registred Password) for that user.
             // If the Key does not exist in Dictionary then false will be returned 
-            bool userExist = userPasswordDict.TryGetValue(username, out registredPassword);//?
+            bool userExist = userLoginDict.TryGetValue(username, out registredPassword);//?
             if (userExist)
             {
                 if (password.CompareTo(registredPassword) == 0)
@@ -140,7 +137,9 @@ namespace ZombieKillerMenu
             }
             return lblErrorMessage.Text;
         }
+        // ↑↑ Function 3: Checks if the entered login data corresponds with any previus saved user data ↑↑
 
+        // ↓↓ Function 4: if Function 3 does not return any error message, then login on click ↓↓
         private void btnLogin_Click(object sender, EventArgs e)
         {
             string errorMessage = Login(txtUsername.Text, txtPassword.Text);
@@ -159,5 +158,11 @@ namespace ZombieKillerMenu
             }
 
         }
+
+        private void txtPassword_TextChanged(object sender, EventArgs e)
+        {
+
+        }
+        // ↑↑ Function 4: if Function 3 does not return any error message, then login on click ↑↑
     }
 }

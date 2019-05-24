@@ -43,8 +43,8 @@
             this.btnPlay.Location = new System.Drawing.Point(326, 85);
             this.btnPlay.Name = "btnPlay";
             this.btnPlay.Size = new System.Drawing.Size(100, 51);
-            this.btnPlay.TabIndex = 0;
-            this.btnPlay.Text = "button1";
+            this.btnPlay.TabIndex = 1;
+            this.btnPlay.Text = "Start game";
             this.btnPlay.UseVisualStyleBackColor = true;
             this.btnPlay.Click += new System.EventHandler(this.btnPlay_Click);
             // 
@@ -53,7 +53,7 @@
             this.edtServerIP.Location = new System.Drawing.Point(168, 353);
             this.edtServerIP.Name = "edtServerIP";
             this.edtServerIP.Size = new System.Drawing.Size(201, 26);
-            this.edtServerIP.TabIndex = 1;
+            this.edtServerIP.TabIndex = 2;
             // 
             // label1
             // 
@@ -78,14 +78,14 @@
             this.edtClientIP.Location = new System.Drawing.Point(541, 353);
             this.edtClientIP.Name = "edtClientIP";
             this.edtClientIP.Size = new System.Drawing.Size(201, 26);
-            this.edtClientIP.TabIndex = 4;
+            this.edtClientIP.TabIndex = 3;
             // 
             // btnConnect
             // 
             this.btnConnect.Location = new System.Drawing.Point(541, 275);
             this.btnConnect.Name = "btnConnect";
             this.btnConnect.Size = new System.Drawing.Size(89, 37);
-            this.btnConnect.TabIndex = 5;
+            this.btnConnect.TabIndex = 4;
             this.btnConnect.Text = "Connect";
             this.btnConnect.UseVisualStyleBackColor = true;
             this.btnConnect.Click += new System.EventHandler(this.btnConnect_Click);
@@ -102,7 +102,7 @@
             this.Controls.Add(this.edtServerIP);
             this.Controls.Add(this.btnPlay);
             this.Name = "Menu";
-            this.Text = "Menu";
+            this.Text = "Client IP";
             this.ResumeLayout(false);
             this.PerformLayout();
 

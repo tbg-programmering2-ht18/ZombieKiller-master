@@ -6,9 +6,9 @@ using System.Threading.Tasks;
 
 namespace ZombieKillerMenu
 {
-    class Records
+    public class Records
     {
-        public string GameName { get; set; }
+        public string GameName { get; set; }    
         public int Highscore{ get; set; }
         public int SurvivalTime{ get; set; }
 

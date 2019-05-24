@@ -25,11 +25,10 @@ namespace ZombieKillerMenu
         public Menu()
         {
             InitializeComponent();
-            //The name localhost normally resolves to the IPv4 loopback address 127.0.0.1, and to the IPv6 loopback address ::1
             IPAddress[] localIP = Dns.GetHostAddresses(Dns.GetHostName());
             foreach (IPAddress adress in localIP)
             {
-                //Checks for ipV4
+                //Checks for IPv4
                 if (adress.AddressFamily == AddressFamily.InterNetwork)
                 {
                     edtServerIP.Text = adress.ToString();
@@ -42,57 +41,64 @@ namespace ZombieKillerMenu
         {
             if (FrmTheGame.ShowDialog() == DialogResult.OK)
             {
-                // Clear the textboxes (Looks and feels good) 
+                // Clear the textboxes, it looks good
                 this.Show();
             }
         }
 
         private void btnConnect_Click(object sender, EventArgs e)
         {
-            // Server
-            try
-            {
-                //Check with ex Wireshark 
-                TcpListener listener = new TcpListener(IPAddress.Any, 5001);
-                listener.Start();
-                this.BackColor = Color.Green;
-                this.Update();
-                client = listener.AcceptTcpClient(); //Accept a pending connection request 
-                STR = new StreamReader(client.GetStream());
-                STW = new StreamWriter(client.GetStream());
-                STW.AutoFlush = true;
-                backgroundWorker1.RunWorkerAsync();
-                backgroundWorker2.WorkerSupportsCancellation = true;
-            }
-            catch (Exception ex)
-            {
-                MessageBox.Show(ex.Message.ToString());
-            }
-
-            try
-            {
-                client = new TcpClient();
-
-                //Represents a network endpoint as an IP address and a port number.
-                IPEndPoint ipEnd = new IPEndPoint(IPAddress.Parse(edtClientIP.Text), 5001);
-
-                //Connects the client to a remote TCP host using the specified host name and port number.
-                client.Connect(ipEnd);
-                if (client.Connected)
+                 
+                if(edtServerIP.Text != "")
                 {
-                    this.BackColor = Color.Green;
-                    this.Update();
-                    STR = new StreamReader(client.GetStream());
-                    STW = new StreamWriter(client.GetStream());
-                    STW.AutoFlush = true;
-                    backgroundWorker1.RunWorkerAsync();
-                    backgroundWorker2.WorkerSupportsCancellation = true;
+                    try
+                    {
+                        //Check with ex Wireshark 
+                        TcpListener listener = new TcpListener(IPAddress.Any, 5001);
+                        listener.Start();
+                        this.BackColor = Color.Green;
+                        this.Update();
+                        client = listener.AcceptTcpClient(); //Accept a pending connection request 
+                        STR = new StreamReader(client.GetStream());
+                        STW = new StreamWriter(client.GetStream());
+                        STW.AutoFlush = true;
+                        backgroundWorker1.RunWorkerAsync();
+                        backgroundWorker2.WorkerSupportsCancellation = true;
+                    }
+                    catch (Exception ex)
+                    {
+                        MessageBox.Show(ex.Message.ToString());
+                    }
                 }
-            }
-            catch (Exception ex)
-            {
-                MessageBox.Show(ex.Message.ToString());
-            }
+
+            
+                else if(edtClientIP.Text != "")
+                {
+                    try
+                    {
+                        client = new TcpClient();
+
+                        //Represents a network endpoint as an IP address and a port number.
+                        IPEndPoint ipEnd = new IPEndPoint(IPAddress.Parse(edtClientIP.Text), 5001);
+
+                        //Connects the client to a remote TCP host using the specified host name and port number.
+                        client.Connect(ipEnd);
+                        if (client.Connected)
+                        {
+                            this.BackColor = Color.Green;
+                            this.Update();
+                            STR = new StreamReader(client.GetStream());
+                            STW = new StreamWriter(client.GetStream());
+                            STW.AutoFlush = true;
+                            backgroundWorker1.RunWorkerAsync();
+                            backgroundWorker2.WorkerSupportsCancellation = true;
+                        }
+                    }
+                    catch (Exception ex)
+                    {
+                        MessageBox.Show(ex.Message.ToString());
+                    }
+                } 
         }
     }
 }

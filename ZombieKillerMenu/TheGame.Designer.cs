@@ -93,7 +93,7 @@
             this.pictureBox3.SizeMode = System.Windows.Forms.PictureBoxSizeMode.AutoSize;
             this.pictureBox3.TabIndex = 7;
             this.pictureBox3.TabStop = false;
-            this.pictureBox3.Tag = "Zombie";
+            this.pictureBox3.Tag = "zombie";
             // 
             // Player
             // 
@@ -114,7 +114,7 @@
             this.pictureBox2.SizeMode = System.Windows.Forms.PictureBoxSizeMode.AutoSize;
             this.pictureBox2.TabIndex = 5;
             this.pictureBox2.TabStop = false;
-            this.pictureBox2.Tag = "Zombie";
+            this.pictureBox2.Tag = "zombie";
             // 
             // pictureBox1
             // 
@@ -125,20 +125,19 @@
             this.pictureBox1.SizeMode = System.Windows.Forms.PictureBoxSizeMode.AutoSize;
             this.pictureBox1.TabIndex = 3;
             this.pictureBox1.TabStop = false;
-            this.pictureBox1.Tag = "Zombie";
+            this.pictureBox1.Tag = "zombie";
             // 
             // timer1
             // 
-            this.timer1.Enabled = true;
             this.timer1.Interval = 20;
             this.timer1.Tick += new System.EventHandler(this.gameEngine);
             // 
             // redtHistory
             // 
             this.redtHistory.Enabled = false;
-            this.redtHistory.Location = new System.Drawing.Point(29, 635);
+            this.redtHistory.Location = new System.Drawing.Point(622, 402);
             this.redtHistory.Name = "redtHistory";
-            this.redtHistory.Size = new System.Drawing.Size(862, 164);
+            this.redtHistory.Size = new System.Drawing.Size(283, 235);
             this.redtHistory.TabIndex = 8;
             this.redtHistory.Text = "";
             // 
@@ -147,7 +146,7 @@
             this.AutoScaleDimensions = new System.Drawing.SizeF(9F, 20F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.BackColor = System.Drawing.SystemColors.ControlDarkDark;
-            this.ClientSize = new System.Drawing.Size(917, 818);
+            this.ClientSize = new System.Drawing.Size(917, 649);
             this.Controls.Add(this.redtHistory);
             this.Controls.Add(this.pictureBox3);
             this.Controls.Add(this.Player);
@@ -158,8 +157,9 @@
             this.Controls.Add(this.label2);
             this.Controls.Add(this.label1);
             this.Name = "TheGame";
-            this.Text = "TheGame";
+            this.Text = "Zombie Shooter";
             this.Load += new System.EventHandler(this.TheGame_Load);
+            this.Enter += new System.EventHandler(this.TheGame_Enter);
             this.KeyDown += new System.Windows.Forms.KeyEventHandler(this.keyisdown);
             this.KeyUp += new System.Windows.Forms.KeyEventHandler(this.keyisup);
             ((System.ComponentModel.ISupportInitialize)(this.pictureBox3)).EndInit();

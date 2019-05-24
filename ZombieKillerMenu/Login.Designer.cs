@@ -81,14 +81,16 @@
             this.txtUsername.Location = new System.Drawing.Point(389, 102);
             this.txtUsername.Name = "txtUsername";
             this.txtUsername.Size = new System.Drawing.Size(241, 26);
-            this.txtUsername.TabIndex = 3;
+            this.txtUsername.TabIndex = 1;
             // 
             // txtPassword
             // 
             this.txtPassword.Location = new System.Drawing.Point(389, 187);
             this.txtPassword.Name = "txtPassword";
+            this.txtPassword.PasswordChar = '*';
             this.txtPassword.Size = new System.Drawing.Size(241, 26);
-            this.txtPassword.TabIndex = 4;
+            this.txtPassword.TabIndex = 2;
+            this.txtPassword.TextChanged += new System.EventHandler(this.txtPassword_TextChanged);
             // 
             // label4
             // 
@@ -104,15 +106,16 @@
             // 
             this.createUsrPassword.Location = new System.Drawing.Point(389, 412);
             this.createUsrPassword.Name = "createUsrPassword";
+            this.createUsrPassword.PasswordChar = '*';
             this.createUsrPassword.Size = new System.Drawing.Size(241, 26);
-            this.createUsrPassword.TabIndex = 9;
+            this.createUsrPassword.TabIndex = 6;
             // 
             // createUsrName
             // 
             this.createUsrName.Location = new System.Drawing.Point(389, 360);
             this.createUsrName.Name = "createUsrName";
             this.createUsrName.Size = new System.Drawing.Size(241, 26);
-            this.createUsrName.TabIndex = 8;
+            this.createUsrName.TabIndex = 5;
             // 
             // label5
             // 
@@ -146,7 +149,7 @@
             this.confirmUsrPassword.Location = new System.Drawing.Point(389, 516);
             this.confirmUsrPassword.Name = "confirmUsrPassword";
             this.confirmUsrPassword.Size = new System.Drawing.Size(241, 26);
-            this.confirmUsrPassword.TabIndex = 12;
+            this.confirmUsrPassword.TabIndex = 8;
             // 
             // label8
             // 
@@ -162,7 +165,7 @@
             this.btnSignUp.Location = new System.Drawing.Point(683, 506);
             this.btnSignUp.Name = "btnSignUp";
             this.btnSignUp.Size = new System.Drawing.Size(103, 47);
-            this.btnSignUp.TabIndex = 14;
+            this.btnSignUp.TabIndex = 9;
             this.btnSignUp.Text = "Sign up";
             this.btnSignUp.UseVisualStyleBackColor = true;
             this.btnSignUp.Click += new System.EventHandler(this.btnSignUp_Click);
@@ -172,7 +175,7 @@
             this.gameNametxt.Location = new System.Drawing.Point(389, 465);
             this.gameNametxt.Name = "gameNametxt";
             this.gameNametxt.Size = new System.Drawing.Size(241, 26);
-            this.gameNametxt.TabIndex = 16;
+            this.gameNametxt.TabIndex = 7;
             this.gameNametxt.TextChanged += new System.EventHandler(this.textBox3_TextChanged);
             // 
             // GameName
@@ -190,7 +193,7 @@
             this.btnLogin.Location = new System.Drawing.Point(683, 177);
             this.btnLogin.Name = "btnLogin";
             this.btnLogin.Size = new System.Drawing.Size(103, 47);
-            this.btnLogin.TabIndex = 17;
+            this.btnLogin.TabIndex = 3;
             this.btnLogin.Text = "Login";
             this.btnLogin.UseVisualStyleBackColor = true;
             this.btnLogin.Click += new System.EventHandler(this.btnLogin_Click);

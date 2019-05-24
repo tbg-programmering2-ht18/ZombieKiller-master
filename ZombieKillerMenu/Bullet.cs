@@ -16,7 +16,6 @@ namespace ZombieKillerMenu
         public int speed = 20;
         PictureBox bullet = new PictureBox();
         Timer tm = new Timer();
-
         public int bulletLeft;
         public int bulletTop;
         //↑↑ Varibledeclaration ↑↑

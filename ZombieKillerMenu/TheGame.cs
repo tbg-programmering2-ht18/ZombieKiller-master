@@ -13,10 +13,10 @@ using System.IO;
 
 namespace ZombieKillerMenu
 {
+
     public partial class TheGame : Form
     {
-        //↓↓ Varibledeclaration ↓↓
-
+        //↓↓ Variabledeclarator ↓↓
         bool goUp; // Used for the player to go up the screen
         bool goDown; // Used for the player to go down the screen
         bool goLeft; // Used for the player to go left on the screen
@@ -25,12 +25,20 @@ namespace ZombieKillerMenu
         double playerHealth = 100; // Represents the players health in the game
         int speed = 10; // Represents the players moving speed in the game
         int ammo = 10; // Represents the players amount of bullets at the start of the game
-        int zombieSpeed = 3; // Represents the moving speed of zombies in the game
+        int zombieSpeed = 1; // Represents the moving speed of zombies in the game
         int score = 0; // Represents the players achived score troughout the game
-        bool gameOver; // Is game finsihed or not
+        bool gameOver = false; // Is game finsihed or not
         Random rnd = new Random();
-    
-        //↑↑ Varibledeclaration ↑↑
+
+        private TcpClient client; // Provides client connection for TCP network service.
+                                  // Network service = application that is running on the network application layer.
+        public StreamWriter STW;
+        public StreamReader STR;
+        public string recieveText;
+        public string sendText;
+
+        public Records GameName;
+        //↑↑ Variabledeclarator ↑↑
 
         public TheGame()
         {
@@ -38,6 +46,48 @@ namespace ZombieKillerMenu
 
         }
 
+        //↓↓ Function 1: A key is being pressed down ↓↓
+        private void keyisdown(object sender, KeyEventArgs e)
+        {
+            timer1.Enabled = true;
+
+            if (gameOver == true) return; // None of the below are nessicary if the game has ended already
+
+            // If left key is pressed,   
+            if (e.KeyCode == Keys.Left)
+            {
+                goLeft = true;
+                facing = "left";
+                Player.Image = Properties.Resources.left;
+            }
+
+            // If right key is pressed,
+            if (e.KeyCode == Keys.Right)
+            {
+                goRight = true;
+                facing = "right";
+                Player.Image = Properties.Resources.right;
+            }
+
+            // If the up key is pressed,
+            if (e.KeyCode == Keys.Up)
+            {
+                goUp = true;
+                facing = "up";
+                Player.Image = Properties.Resources.up;
+            }
+            // If the down key is pressed,
+            if (e.KeyCode == Keys.Down)
+            {
+                goDown = true;
+                facing = "down";
+                Player.Image = Properties.Resources.down;
+            }
+        }
+        //↑↑ Function 1: A key is being pressed down ↑↑
+
+
+        //↓↓ Function 2: A key is being relesed ↓↓
         private void keyisup(object sender, KeyEventArgs e)
         {
             if (gameOver == true) return; // None of the below are needed if the game has ended already
@@ -76,47 +126,10 @@ namespace ZombieKillerMenu
 
             }
         }
-
-        private void keyisdown(object sender, KeyEventArgs e)
-        {
-            if (gameOver == true) return; // None of the below are nessicary if the game has ended already
-
-            // If left key is pressed,   
-            if (e.KeyCode == Keys.Left)
-                {
-                    goLeft = true;
-                    facing = "left";
-                    Player.Image = Properties.Resources.left;
-                }
-
-                // If right key is pressed,
-                if (e.KeyCode == Keys.Right)
-                {
-                    goRight = true;
-                    facing = "right";
-                    Player.Image = Properties.Resources.right;
-                }
-
-                // If the up key is pressed,
-                if(e.KeyCode == Keys.Up)
-                {
-                    goUp = true;
-                    facing = "up";
-                    Player.Image = Properties.Resources.up;
-                }
-                // If the down key is pressed,
-                if (e.KeyCode == Keys.Down)
-                {
-                    goDown = true;
-                    facing = "down";
-                    Player.Image = Properties.Resources.down;
-                }
+        //↑↑ Function 2: A key is being relesed ↑↑
 
 
-            
-            
-        }
-
+        //↓↓ Function 3: Engine that handles movement, interactions and it runs on a timer ↓↓
         private void gameEngine(object sender, EventArgs e)
         {
             // Player is still alive
@@ -129,6 +142,7 @@ namespace ZombieKillerMenu
             // Player is dead (PlayerHealth < 1)
             else
             {
+                sendText = "You have won the game";
                 Player.Image = Properties.Resources.dead;
                 timer1.Stop();
                 gameOver = true;
@@ -140,10 +154,9 @@ namespace ZombieKillerMenu
             
             if (playerHealth < 20)
             {
-                progressBar1.ForeColor = System.Drawing.Color.Red;
+                progressBar1.ForeColor = System.Drawing.Color.Red; // Player HP bar becomes red
             }
 
-            //↓↓ Currently confusing me ↓↓
             if (goLeft && Player.Left > 0)
             {
                 Player.Left -= speed;
@@ -163,7 +176,6 @@ namespace ZombieKillerMenu
             {
                 Player.Top += speed;
             }
-            //↑↑ Currently confusing me ↑↑
 
             // x is a Control and we will search for all controls in this loop
             foreach (Control x in this.Controls)
@@ -240,20 +252,23 @@ namespace ZombieKillerMenu
                             this.Controls.Remove(j);
                             j.Dispose();
                             this.Controls.Remove(x);
-                            x.Dispose();
+                            x.Dispose(); // KILL IT!!!, in other words, remove this zombie figure
                             MakeZombies();
+
+                            if (score == 5) // After you have killed five zombies
+                            {
+                                sendText = " Your opponent has killed " + score + " zombies";
+                            }
                         }
                     }
-
                 }
-
             }
-
-
-
         }
+        //↑↑ Function 3: Engine that handles movement, interactions and it runs a timer ↑↑
 
-        private void DropAmmo()
+
+        //↓↓ Function 4: When the player is out of ammontion ↓↓
+        private void DropAmmo() // This funktion is being called from Function 2 "KeyIsUp" 
         {
             PictureBox ammo = new PictureBox(); // New instance for the picture box 
             ammo.Image = Properties.Resources.ammo_Image; // Assign the ammo image to the Picture box
@@ -264,21 +279,26 @@ namespace ZombieKillerMenu
             this.Controls.Add(ammo); // Add the ammo picture to the screen
             ammo.BringToFront(); // Bring it to front
             Player.BringToFront(); // Bring the player to front
+            redtHistory.AppendText("Dropped Ammo" + "\n"); 
         }
+        //↑↑ Function 4: When the player is out of ammontion ↑↑
 
-        private void Shoot(string direct) // Paramenter comes from the "KeyIsUp" function.
-        {
-            Bullet shoot = new Bullet(); // New instance for the picture box
+
+        //↓↓ Function 5: When the player is out of ammontion ↓↓
+        private void Shoot(string direct) // This function is being called from Function 2 "KeyIsUp       
+        {                                 //Paramenter "direct" is the facing varible, it comes from Function 1 "KeyIsDown"          
+            Bullet shoot = new Bullet();// New instance for the picture box
             shoot.direction = direct; 
             shoot.bulletLeft = Player.Left + (Player.Width / 2);
             shoot.bulletTop = Player.Top + (Player.Height / 2);
             shoot.mkBullet(this); // Run the mkBullet (Make bullets) from the bullet class;
-
-
-
         }
+        //↑↑ Function 5: When the player is out of ammontion ↑↑
 
-        private void MakeZombies()
+
+
+        //↓↓ Function 6: When zombie has been killed, generate a new one ↓↓
+        private void MakeZombies() // This function is being called from 
         {
             PictureBox zombie = new PictureBox();
             zombie.Tag = "zombie";
@@ -288,7 +308,45 @@ namespace ZombieKillerMenu
             zombie.SizeMode = PictureBoxSizeMode.AutoSize;
             this.Controls.Add(zombie);
             Player.BringToFront();
+        }
+        //↑↑ Function 6: When zombie has been killed, generate a new one ↑↑
 
+
+        private void backgroundWorker1_DoWork(object sender, DoWorkEventArgs e)
+        {
+            while (client.Connected)
+            {
+                try
+                {
+                    recieveText = STR.ReadLine();
+                    this.redtHistory.Invoke(new MethodInvoker(delegate ()
+                    {
+                        redtHistory.AppendText("You:" + recieveText + "\n");
+                    }));
+                    recieveText = "";
+                }
+                catch (Exception ex)
+                {
+                    MessageBox.Show(ex.Message.ToString());
+                }
+            }
+        }
+
+        private void backgroundWorker2_DoWork(object sender, DoWorkEventArgs e)
+        {
+            if (client.Connected)
+            {
+                STW.WriteLine(sendText);
+                this.redtHistory.Invoke(new MethodInvoker(delegate ()
+                {
+                    redtHistory.AppendText("Me:" + sendText + "\n");
+                }));
+            }
+            else
+            {
+                MessageBox.Show("Sending failed");
+            }
+            backgroundWorker2.CancelAsync();
 
         }
 
@@ -296,6 +354,9 @@ namespace ZombieKillerMenu
         {
 
         }
-        
+
+        private void TheGame_Enter(object sender, EventArgs e)
+        {
+        }
     }
 }
